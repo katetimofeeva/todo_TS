@@ -1,20 +1,19 @@
-import  React from 'react'
-
-import MainInput from "./MainInput/MainInput";
+import React from "react";
 
 import styled from "styled-components";
+
+import MainInput from "./MainInput/index";
 
 const Header: React.FC = () => {
   return (
     <>
       <HeaderTodos>
-        
         <Logo>todos</Logo>
         <MainInput />
       </HeaderTodos>
     </>
   );
-}
+};
 
 const HeaderTodos = styled.header`
   position: relative;
@@ -41,7 +40,7 @@ const HeaderTodos = styled.header`
   }
 `;
 
- const Logo = styled.h1`
+const Logo = styled.h1`
   width: 100%;
   position: absolute;
   top: -60px;
@@ -53,7 +52,5 @@ const HeaderTodos = styled.header`
   color: rgba(255, 255, 255, 0.3);
   text-shadow: -1px -1px rgb(0 0 0 / 20%);
 `;
-
-
 
 export default Header;

@@ -4,9 +4,9 @@ import { useSelector } from "react-redux";
 
 import styled from "styled-components";
 
-import Header from "../components/Header/Header";
-import List from "../components/TasksList/List/List";
-import Footer from "../components/Footer/Footer";
+import Header from "../components/Header/index";
+import List from "../components/TasksList/List/index";
+import Footer from "../components/Footer/index";
 // import { getTodos } from "../Utils/Servise.jsx";
 import { receiveTodos } from "../redux/selectors";
 // import { addTaskActionCreator } from "../redux/actions";
@@ -14,9 +14,10 @@ import { TodoItem } from "../types/Types";
 
 const Todo: React.FC = () => {
   const todos: Array<TodoItem> = useSelector(receiveTodos);
+
+  console.log(process.env);
   // const dispatch = useDispatch();
-  // useEffect(() => {
-  //   console.log("useEffect");
+  // useEffect(() => {  
   //   getTodos().then((res) => {
   //     dispatch(addTaskActionCreator(res.data));
   //   });

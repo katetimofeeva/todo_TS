@@ -1,7 +1,5 @@
-
- export type TodoItem = {
-    description: string;
-    id: string;
-    completed: boolean;
-  };
-  
+export type TodoItem = {
+  description: string;
+  id: string;
+  completed: boolean;
+};

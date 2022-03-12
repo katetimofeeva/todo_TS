@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -10,10 +11,10 @@ import styled from "styled-components";
 // } from "../../../Utils/Servise";
 
 import {
-  deleteTaskActionCreator,
-  toggleTaskActionCreator,
-  editTaskActionCreator,
-  setMarkerActionCreator,
+  deleteTask,
+  toggleTask,
+  editTask,
+  setMarker,
 } from "../../../redux/actions";
 
 import { receiveTodos, receiveMarker } from "../../../redux/selectors";
@@ -24,7 +25,6 @@ interface ItemProps {
 }
 
 const TaskItem: React.FC<ItemProps> = ({ item }) => {
-  
   const [activeEdit, setActiveEdit] = useState(true);
   const [value, setValue] = useState(item.description);
 
@@ -36,35 +36,33 @@ const TaskItem: React.FC<ItemProps> = ({ item }) => {
     setValue(e.target.value);
   };
 
-  const completedTask = (id: string) => {
-    // console.log(item.completed)
-    // console.log(todos)
-    dispatch(toggleTaskActionCreator(id));
+  const completedTask = (): void => {
+    dispatch(toggleTask(item.id));
     // completedItem(item._id, item.completed);
     // getTodos().then((res) => {
     //   dispatch(toggleTaskActionCreator(res.data ) );
     // });
   };
 
-  const handleDeleteTask = (id: string) => {
-    dispatch(deleteTaskActionCreator(id));
+  const handleDeleteTask = (): void => {
+    dispatch(deleteTask(item.id));
     // deleteItem(item._id);
     // getTodos().then((res) => {
     //   dispatch(deleteTaskActionCreator(res.data));
     // });
 
     if (marker === "completed" && todos.length) {
-      dispatch(setMarkerActionCreator("all"));
+      dispatch(setMarker("all"));
     }
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent, id: string) => {
+  const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && value.length) {
       // editItem(value, item._id);
-      dispatch(editTaskActionCreator(id, value));
+      dispatch(editTask(item.id, value));
       setActiveEdit(true);
     } else if (e.key === "Enter" && !value.length) {
-      dispatch(deleteTaskActionCreator(id));
+      dispatch(deleteTask(item.id));
       // deleteItem(item._id);
 
       setActiveEdit(true);
@@ -75,14 +73,14 @@ const TaskItem: React.FC<ItemProps> = ({ item }) => {
     // });
   };
 
-  const handleBlur = (id: string) => {
+  const handleBlur = (): void => {
     if (value.length) {
       console.log("blur");
-      dispatch(editTaskActionCreator(id, value));
+      dispatch(editTask(item.id, value));
       // editItem(value, item._id);
       setActiveEdit(true);
     } else {
-      dispatch(deleteTaskActionCreator(id));
+      dispatch(deleteTask(item.id));
       // deleteItem(item._id);
     }
     setActiveEdit(true);
@@ -94,23 +92,19 @@ const TaskItem: React.FC<ItemProps> = ({ item }) => {
   const description: string = item.description.slice(0, 30);
 
   return (
-    <StyledLi>
+    <Root>
       <Wrapper>
         <div>
-          <StyledInput
+          <StyledCheckbox
             type="checkbox"
             checked={item.completed}
             id={item.id}
-            onChange={() => completedTask(item.id)}
-            //что надо писать в onChange
+            onChange={completedTask}
           />
-
-          <StyleLabel
+          <StyledLabel
             activeEdit={activeEdit}
             completed={item.completed}
-            htmlFor={item.id}
-            // onClick={() => completedTask(item.id )}
-          ></StyleLabel>
+          ></StyledLabel>
         </div>
         {activeEdit ? (
           <ItemTask
@@ -120,30 +114,27 @@ const TaskItem: React.FC<ItemProps> = ({ item }) => {
             {description}
           </ItemTask>
         ) : (
-          <Value
+          <StyledInput
             type="text"
             value={value}
-            onChange={(e) => handleChange(e)}
-            onKeyDown={(e) => handleKeyDown(e, item.id)}
-            onBlur={() => handleBlur(item.id)}
+            onChange={handleChange}
+            onKeyDown={handleKeyDown}
+            onBlur={handleBlur}
           />
         )}
         {activeEdit && (
           <div>
-            <DeleteButton
-              className="delete"
-              onClick={() => handleDeleteTask(item.id)}
-            >
+            <DeleteButton className="delete" onClick={handleDeleteTask}>
               ✖
             </DeleteButton>
           </div>
         )}
       </Wrapper>
-    </StyledLi>
+    </Root>
   );
 };
 
-const Value = styled.input`
+const StyledInput = styled.input`
   display: block;
   width: 490px;
   position: absolute;
@@ -170,7 +161,7 @@ const ItemTask = styled.div<{ completed: boolean }>`
     completed ? "line-through" : "none"};
 `;
 
-const StyledLi = styled.li`
+const Root = styled.li`
   display: list-item;
   text-align: -webkit-match-parent;
   list-style-type: none;
@@ -191,11 +182,11 @@ const Wrapper = styled.div`
   background-color: #fff;
 `;
 
-const StyledInput = styled.input`
+const StyledCheckbox = styled.input`
   display: none;
 `;
 
-const StyleLabel = styled.label<{ completed: boolean; activeEdit: boolean }>`
+const StyledLabel = styled.label<{ completed: boolean; activeEdit: boolean }>`
   display: inline-flex;
   align-items: center;
   user-select: none;

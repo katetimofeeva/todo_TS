@@ -1,58 +1,60 @@
 import { TodoItem } from "../types/Types";
 
-export const addTaskActionCreator = (data: TodoItem) => {
+enum TodoActionType {
+  ADD_TASK = "ADD_TASK",
+  DELETE_TASK = "DELETE_TASK",
+  TOGGLE_COMPLETE_TASK = "TOGGLE_COMPLETE_TASK",
+  EDIT_TASK = "EDIT_TASK",
+  COMPLETED_ALL_TASKS = "COMPLETED_ALL_TASKS",
+  DELETE_ALL_TASK = "DELETE_ALL_TASK",
+  SET_MARKER = "SET_MARKER",
+}
+
+export const addTask = (data: TodoItem) => {
   return {
-    type: "ADD_TASK",
+    type: TodoActionType.ADD_TASK,
     payload: { todos: data },
   };
 };
 
-export const deleteTaskActionCreator = (id: string) => {
+export const deleteTask = (id: string) => {
   return {
-    type: "DELETE_TASK",
+    type: TodoActionType.DELETE_TASK,
     payload: { id: id },
   };
 };
 
-export const toggleTaskActionCreator = (id: string) => {
+export const toggleTask = (id: string) => {
   return {
-    type: "TOGGLE_COMPLETE_TASK",
+    type: TodoActionType.TOGGLE_COMPLETE_TASK,
     payload: { id: id },
   };
 };
 
-export const editTaskActionCreator = (id: string, value: string) => {
+export const editTask = (id: string, value: string) => {
   return {
-    type: "EDIT_TASK",
+    type: TodoActionType.EDIT_TASK,
     payload: { id: id, description: value },
   };
 };
 
-export const completedAllTaskActionCreator = (completed: boolean) => {
+export const completedAllTasks = (completed: boolean) => {
   return {
-    type: "COMPLETED_ALL_TASKS",
+    type: TodoActionType.COMPLETED_ALL_TASKS,
     payload: { completed: completed },
   };
 };
 
-export const deleteAllTaskActionCreator = (data: TodoItem[]) => {
+export const deleteAllTask = (data: TodoItem[]) => {
   return {
-    type: "DELETE_ALL_TASKS",
+    type: TodoActionType.DELETE_ALL_TASK,
     payload: { todos: data },
   };
 };
 
-export const setMarkerActionCreator = (marker: string) => {
+export const setMarker = (marker: string) => {
   return {
-    type: "SET_MARKER",
+    type: TodoActionType.SET_MARKER,
     payload: { marker: marker },
   };
 };
-// export const DELETE_TASK = "DELETE_TASK";
-// export const TOGGLE_COMPLETE_TASK = "TOGGLE_COMPLETE_TASK";
-// export const EDIT_TASK = "EDIT_TASK";
-// export const COMPLETED_ALL_TASKS = "COMPLETED_ALL_TASKS";
-
-// export const DELETE_ALL_TASKS = "DELETE_ALL_TASKS";
-
-// export const SET_MARKER = "SET_MARKER";

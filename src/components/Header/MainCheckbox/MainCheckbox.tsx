@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import styled from "styled-components";
 
-import { completedAllTaskActionCreator } from "../../../redux/actions";
+import { completedAllTasks } from "../../../redux/actions";
 import { receiveTodos } from "../../../redux/selectors";
 import { TodoItem } from "../../../types/Types";
 
@@ -22,12 +22,10 @@ const MainCheckbox = () => {
 
   const handleToggleAllTasks = (e: React.ChangeEvent<HTMLInputElement>) => {
     // completedAllTasks(e.target.checked);
-    // completedAllItem(e.target.checked)
-    // dispatch({ type: COMPLETED_ALL_TASKS, completed: e.target.checked });
     // getTodos().then((res) => {
     //   dispatch(completedAllTaskActionCreator(res.data));
     // });
-    dispatch(completedAllTaskActionCreator(isAllCompleted));
+    dispatch(completedAllTasks(isAllCompleted));
   };
 
   return (
@@ -36,7 +34,6 @@ const MainCheckbox = () => {
         type="checkbox"
         id="input_header_check"
         checked={isAllCompleted}
-        // onClick={handleToggleAllTasks}
         onChange={handleToggleAllTasks}
       />
       <Label htmlFor="input_header_check" visible={!todosLength}>

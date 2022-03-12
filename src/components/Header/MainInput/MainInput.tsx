@@ -4,10 +4,9 @@ import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import { nanoid } from "nanoid";
 
-import MainCheckbox from "../MainCheckbox/MainCheckbox";
+import MainCheckbox from "../MainCheckbox/index";
 // import { addTodo, getTodos } from "../../../Utils/Servise";
-
-import { addTaskActionCreator } from "../../../redux/actions";
+import { addTask } from "../../../redux/actions";
 
 const MainInput = () => {
   const dispatch = useDispatch();
@@ -20,9 +19,8 @@ const MainInput = () => {
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && value.trim().length !== 0) {
-      // dispatch({ type: ADD_TASK, description: value, });
       dispatch(
-        addTaskActionCreator({
+        addTask({
           description: value,
           id: nanoid(10),
           completed: false,
@@ -48,8 +46,7 @@ const MainInput = () => {
         onKeyDown={handleKeyDown}
         placeholder="Whats need to be done?"
         autoComplete="off"
-        autoFocus
-        // ref={this.myRef}
+        autoFocus       
       />
     </Root>
   );

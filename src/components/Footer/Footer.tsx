@@ -3,29 +3,31 @@ import { useDispatch, useSelector } from "react-redux";
 
 import styled from "styled-components";
 
-import FilterTasks from "./FilterTasks/FilterTasks";
-import { StyledForAllButton } from "../ui/Button"
-import { deleteAllTaskActionCreator, setMarkerActionCreator } from "../../redux/actions";
-import { receiveMarker, receiveTodos } from "../../redux/selectors"
+import FilterTasks from "./FilterTasks/index";
+
+import { deleteAllTask, setMarker } from "../../redux/actions";
+import { receiveMarker, receiveTodos } from "../../redux/selectors";
 // import { deleteAllTasks, getTodos} from '../../Utils/Servise'
 
-import {TodoItem} from '../../types/Types'
+import { TodoItem } from "../../types/Types";
 const Footer = () => {
   const todos: TodoItem[] = useSelector(receiveTodos);
-  
+
   const marker: string = useSelector(receiveMarker);
   const dispatch = useDispatch();
-  const countActive = todos.filter((item:TodoItem) => !item.completed).length;
-  const countCompleted = todos.filter((item: TodoItem) => item.completed).length;
+  const countActive = todos.filter((item: TodoItem) => !item.completed).length;
+  const countCompleted = todos.filter(
+    (item: TodoItem) => item.completed
+  ).length;
 
   const clearCompletedAll = () => {
-    dispatch(deleteAllTaskActionCreator(todos) );
-    // deleteAllTasks() 
+    dispatch(deleteAllTask(todos));
+    // deleteAllTasks()
     // getTodos().then((res) => {
     //   dispatch(deleteAllTaskActionCreator(res.data) );
     // });
     if (marker === "completed" && todos.length) {
-      dispatch(setMarkerActionCreator("all") );
+      dispatch(setMarker("all"));
     }
   };
 
@@ -34,13 +36,13 @@ const Footer = () => {
       <StyledSpan>
         <strong>{countActive} </strong>items left
       </StyledSpan>
-      <FooterButtons>
+      <Wrapper>
         <FilterTasks />
-      </FooterButtons>
+      </Wrapper>
       {todos.some((item) => item.completed) ? (
-        <ButtonClearCompleted onClick={clearCompletedAll}>
+        <ClearButton onClick={clearCompletedAll}>
           Clear completed (<strong>{countCompleted}</strong>)
-        </ButtonClearCompleted>
+        </ClearButton>
       ) : (
         ""
       )}
@@ -67,17 +69,6 @@ const Root = styled.footer`
     box-shadow: 0 1px 1px rgb(0 0 0 / 30%), 0 6px 0 -3px rgb(255 255 255 / 80%),
       0 7px 1px -3px rgb(0 0 0 / 30%), 0 43px 0 -6px rgb(255 255 255 / 80%),
       0 44px 2px -6px rgb(0 0 0 / 20%);
-    /* content: "";
-    top: -330%;
-    position: absolute;
-    right: 0;
-    bottom: 31px;
-    left: 0;
-    height: 30px;
-    z-index: 0;
-    box-shadow: 0 3px 1px rgb(0 0 0 / 30%), 0 2px 0 -3px rgb(255 255 255 / 80%),
-      0 1px 1px -3px rgb(0 0 0 / 30%), 0 36px 0 -2px rgb(255 255 255 / 80%),
-      0 44px 2px -6px rgb(0 0 0 / 20%); */
   }
 `;
 
@@ -87,7 +78,7 @@ const StyledSpan = styled.span`
   top: -100%;
 `;
 
-const FooterButtons = styled.ul`
+const Wrapper = styled.ul`
   position: absolute;
   margin: 0;
   padding: 0;
@@ -97,7 +88,7 @@ const FooterButtons = styled.ul`
   top: -100%;
 `;
 //наследование
-const ButtonClearCompleted = styled(StyledForAllButton)`
+const ClearButton = styled.button`
   position: absolute;
   right: 10px;
   float: right;
@@ -110,5 +101,10 @@ const ButtonClearCompleted = styled(StyledForAllButton)`
   border-radius: 3px;
   box-shadow: 0 -1px 0 0 rgb(0 0 0 / 20%);
   top: -100%;
+  border: hidden;
+  color: #83756f;
+  margin: 2px;
+  cursor: pointer;
+  background-color: #eaeaea;
 `;
 export default Footer;

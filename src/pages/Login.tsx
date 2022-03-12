@@ -22,16 +22,6 @@ const Login: React.FC = () => {
       .required("Please Enter your password"),
   });
 
-  // const handleSubmit = (value: { email: string; password: string }): void => {
-  //   console.log(value);
-  //   loginUser(value);
-  // };
-
-  // interface FormValues {
-  //   email: string;
-  //   password: string;
-  // }
-
   return (
     <Root>
       <Logo>Login</Logo>
@@ -41,8 +31,12 @@ const Login: React.FC = () => {
           password: "",
         }}
         validationSchema={ValidationSchema}
-        onSubmit={(value: { email: string; password: string }): void => {
+        onSubmit={(
+          value: { email: string; password: string },
+          { resetForm }
+        ): void => {
           loginUser(value);
+          resetForm();
         }}
       >
         {({
@@ -53,27 +47,26 @@ const Login: React.FC = () => {
           handleBlur,
           handleSubmit,
           isSubmitting,
-          /* and other goodies */
         }) => (
-          <BoxForm onSubmit={handleSubmit}>
-            <SlyledDiv>
-              <CssTextField
+          <StyledForm onSubmit={handleSubmit}>
+            <Wrapper>
+              <StyledField
                 label="Enter you email"
                 required
                 type="email"
                 name="email"
-                // placeholder="Enter you email"
+                placeholder="Enter you email"
                 onChange={handleChange}
                 onBlur={handleBlur}
                 value={values.email}
               />
-            </SlyledDiv>
+            </Wrapper>
 
             {errors.email && touched.email && (
               <InfoError>{errors.email}</InfoError>
             )}
-            <SlyledDiv>
-              <CssTextField
+            <Wrapper>
+              <StyledField
                 required
                 label="Enter you password"
                 type="password"
@@ -83,29 +76,25 @@ const Login: React.FC = () => {
                 onBlur={handleBlur}
                 value={values.password}
               />
-            </SlyledDiv>
+            </Wrapper>
 
             {errors.password && touched.password && (
               <InfoError>{errors.password}</InfoError>
             )}
-            <SteledButton
-              variant="outlined"
-              type="submit"
-              // disabled={isSubmitting}
-            >
+            <SteledButton variant="outlined" type="submit">
               Login
             </SteledButton>
-          </BoxForm>
+          </StyledForm>
         )}
       </Formik>
     </Root>
   );
 };
 
-const BoxForm = styled(Form)`
+const StyledForm = styled(Form)`
   padding: 5% 20%;
 `;
-const SlyledDiv = styled.div`
+const Wrapper = styled.div`
   padding-top: 10%;
 `;
 const SteledButton = styled(Button)`
@@ -113,7 +102,7 @@ const SteledButton = styled(Button)`
   margin-left: 30% !important;
 `;
 
-const CssTextField = styled(TextField)({
+const StyledField = styled(TextField)({
   "& label.Mui-focused": {
     color: "#6c615c",
   },
@@ -121,9 +110,9 @@ const CssTextField = styled(TextField)({
     borderBottomColor: "#6c615c",
   },
   "& .MuiOutlinedInput-root": {
-    // "& fieldset": {
-    //   borderColor: "red",
-    // },
+    "& fieldset": {
+      borderColor: "red",
+    },
     "&:hover fieldset": {
       borderColor: " rgba(115, 124, 156, 0.8),",
     },

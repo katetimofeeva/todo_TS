@@ -1,23 +1,23 @@
 import axios from "axios";
 
+import axiosInstanse from "./API";
+import { TodoItem } from "../types/Types";
 
-
-const loginUser = async(value:{email: string, password: string}) => {
+const loginUser = async (value: { email: string; password: string }) => {
   try {
     await axios.post(
-      ` http://${process.env.REACT_APP_URL}/login`,
-      JSON.stringify( value)
+      ` ${axiosInstanse.defaults.baseURL}/login`,
+      JSON.stringify(value)
     );
-    
   } catch (error) {
     console.error(error);
   }
- 
-}
+};
+
 const addTodo = async (value: string) => {
   try {
     await axios.post(
-      ` http://${process.env.REACT_APP_URL}`,
+      ` ${axiosInstanse.defaults.baseURL}`,
       JSON.stringify({ description: value, completed: false })
     );
   } catch (error) {
@@ -27,7 +27,7 @@ const addTodo = async (value: string) => {
 
 const deleteItem = async (id: string) => {
   try {
-    await axios.post(` http://${process.env.REACT_APP_URL}/delete`, id);
+    await axios.post(` ${axiosInstanse.defaults.baseURL}/delete`, id);
   } catch (error) {
     console.error(error);
   }
@@ -36,7 +36,7 @@ const deleteItem = async (id: string) => {
 const completedItem = async (id: string, checked: boolean) => {
   try {
     await axios.post(
-      `http://${process.env.REACT_APP_URL}/checked`,
+      `${axiosInstanse.defaults.baseURL}/checked`,
       JSON.stringify({ id, checked: !checked })
     );
   } catch (error) {
@@ -47,7 +47,7 @@ const completedItem = async (id: string, checked: boolean) => {
 const completedAllItem = async (checked: boolean) => {
   try {
     await axios.post(
-      `http://${process.env.REACT_APP_URL}/completed`,
+      `${axiosInstanse.defaults.baseURL}/completed`,
       JSON.stringify({ checked: checked })
     );
   } catch (error) {
@@ -57,7 +57,7 @@ const completedAllItem = async (checked: boolean) => {
 
 const deleteAllTasks = async () => {
   try {
-    await axios.post(`http://${process.env.REACT_APP_URL}/deleteAllCompleted`);
+    await axios.post(`${axiosInstanse.defaults.baseURL}/deleteAllCompleted`);
   } catch (error) {
     console.error(error);
   }
@@ -66,7 +66,7 @@ const deleteAllTasks = async () => {
 const editItem = async (value: string, id: string) => {
   try {
     await axios.post(
-      `http://${process.env.REACT_APP_URL}/edit`,
+      `${axiosInstanse.defaults.baseURL}/edit`,
       JSON.stringify({ description: value, id })
     );
   } catch (error) {
@@ -74,10 +74,11 @@ const editItem = async (value: string, id: string) => {
   }
 };
 
-// ${process.env.REACT_APP_URL}
 const getTodos = async () => {
   try {
-    const result = await axios.get(`http://${process.env.REACT_APP_URL}`);
+    const result = await axios.get<TodoItem[] | TodoItem>(
+      `${axiosInstanse.defaults.baseURL}`
+    );
 
     return result;
   } catch (error) {
@@ -93,6 +94,5 @@ export {
   completedAllItem,
   deleteAllTasks,
   editItem,
-  loginUser 
-  // doFetch,
+  loginUser,
 };

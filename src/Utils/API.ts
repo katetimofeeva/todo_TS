@@ -1,6 +1,8 @@
 import axios from "axios";
 
-export default axios.create({
-  baseURL: `http://${process.env.REACT_APP_URL}`,
-  responseType: "json"
+const axiosInstanse = axios.create({
+  baseURL: `http://localhost:3030/`,
+  responseType: "json",
 });
+
+export default axiosInstanse;

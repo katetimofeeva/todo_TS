@@ -1,5 +1,7 @@
+import { TodoItem } from "../types/Types";
+
 export type TodosState = {
-  todos: any[];
+  todos: TodoItem[];
   marker: string;
 };
 
@@ -9,14 +11,24 @@ const initialState = {
 };
 type TodoAction = {
   type: string;
-  payload?: any;
+  payload: any;
 };
+
+// type TodoAction = {
+//   type: string;
+//   payload: {
+//     todos?: TodoItem[] | TodoItem;
+//     marker?: string;
+//     id?: string;
+//     description?: string;
+//     completed?: boolean;
+
+//   }
+// };
 
 function reducer(
   state: TodosState = initialState,
   action: TodoAction
-
-  // { type, id, description, completed, marker, attribute }
 ): TodosState {
   switch (action.type) {
     case "ADD_TASK":
