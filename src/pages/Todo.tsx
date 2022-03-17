@@ -1,27 +1,27 @@
-// import React, { useEffect } from "react";
+import React, { useEffect } from "react";
 
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
 import styled from "styled-components";
 
 import Header from "../components/Header/index";
 import List from "../components/TasksList/List/index";
 import Footer from "../components/Footer/index";
-// import { getTodos } from "../Utils/Servise.jsx";
+import { getTodos } from "../Utils/Servise";
 import { receiveTodos } from "../redux/selectors";
-// import { addTaskActionCreator } from "../redux/actions";
+import { addTasksToList } from "../redux/actions";
 import { TodoItem } from "../types/Types";
 
 const Todo: React.FC = () => {
   const todos: Array<TodoItem> = useSelector(receiveTodos);
 
-  console.log(process.env);
-  // const dispatch = useDispatch();
-  // useEffect(() => {  
-  //   getTodos().then((res) => {
-  //     dispatch(addTaskActionCreator(res.data));
-  //   });
-  // }, []);
+  const dispatch: any = useDispatch();
+  useEffect(() => {
+    getTodos().then((res) => {
+      //@ts-ignore
+      dispatch(addTasksToList(res.data));
+    });
+  }, []);
 
   return (
     <Root>

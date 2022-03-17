@@ -7,7 +7,6 @@ import FilterTasks from "./FilterTasks/index";
 
 import { deleteAllTask, setMarker } from "../../redux/actions";
 import { receiveMarker, receiveTodos } from "../../redux/selectors";
-// import { deleteAllTasks, getTodos} from '../../Utils/Servise'
 
 import { TodoItem } from "../../types/Types";
 const Footer = () => {
@@ -22,10 +21,7 @@ const Footer = () => {
 
   const clearCompletedAll = () => {
     dispatch(deleteAllTask(todos));
-    // deleteAllTasks()
-    // getTodos().then((res) => {
-    //   dispatch(deleteAllTaskActionCreator(res.data) );
-    // });
+
     if (marker === "completed" && todos.length) {
       dispatch(setMarker("all"));
     }
@@ -87,7 +83,7 @@ const Wrapper = styled.ul`
   padding-left: 200px;
   top: -100%;
 `;
-//наследование
+
 const ClearButton = styled.button`
   position: absolute;
   right: 10px;

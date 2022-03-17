@@ -1,37 +1,21 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-
 import styled from "styled-components";
-import { nanoid } from "nanoid";
 
 import MainCheckbox from "../MainCheckbox/index";
-// import { addTodo, getTodos } from "../../../Utils/Servise";
 import { addTask } from "../../../redux/actions";
 
 const MainInput = () => {
   const dispatch = useDispatch();
-
   const [value, setValue] = useState<string>("");
-
+  
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && value.trim().length !== 0) {
-      dispatch(
-        addTask({
-          description: value,
-          id: nanoid(10),
-          completed: false,
-        })
-      );
-
-      // addTodo(value);
-      // getTodos().then((res) => {
-      //   dispatch(addTaskActionCreator(res.data));
-      // });
-
+      dispatch(addTask(value));
       setValue("");
     }
   };
@@ -46,7 +30,7 @@ const MainInput = () => {
         onKeyDown={handleKeyDown}
         placeholder="Whats need to be done?"
         autoComplete="off"
-        autoFocus       
+        autoFocus
       />
     </Root>
   );

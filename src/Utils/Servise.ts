@@ -5,21 +5,18 @@ import { TodoItem } from "../types/Types";
 
 const loginUser = async (value: { email: string; password: string }) => {
   try {
-    await axios.post(
-      ` ${axiosInstanse.defaults.baseURL}/login`,
-      JSON.stringify(value)
-    );
+    await axios.post(` ${axiosInstanse.defaults.baseURL}/login`, value);
   } catch (error) {
     console.error(error);
   }
 };
 
-const addTodo = async (value: string) => {
+const addTodoPost = async (value: string): Promise<any> => {
   try {
-    await axios.post(
-      ` ${axiosInstanse.defaults.baseURL}`,
-      JSON.stringify({ description: value, completed: false })
-    );
+    await axios.post(` ${axiosInstanse.defaults.baseURL}`, {
+      description: value,
+      completed: false,
+    });
   } catch (error) {
     console.error(error);
   }
@@ -35,10 +32,10 @@ const deleteItem = async (id: string) => {
 
 const completedItem = async (id: string, checked: boolean) => {
   try {
-    await axios.post(
-      `${axiosInstanse.defaults.baseURL}/checked`,
-      JSON.stringify({ id, checked: !checked })
-    );
+    await axios.post(`${axiosInstanse.defaults.baseURL}/checked`, {
+      id,
+      checked: !checked,
+    });
   } catch (error) {
     console.error(error);
   }
@@ -46,10 +43,9 @@ const completedItem = async (id: string, checked: boolean) => {
 
 const completedAllItem = async (checked: boolean) => {
   try {
-    await axios.post(
-      `${axiosInstanse.defaults.baseURL}/completed`,
-      JSON.stringify({ checked: checked })
-    );
+    await axios.post(`${axiosInstanse.defaults.baseURL}/completed`, {
+      checked: !checked,
+    });
   } catch (error) {
     console.error(error);
   }
@@ -65,10 +61,10 @@ const deleteAllTasks = async () => {
 
 const editItem = async (value: string, id: string) => {
   try {
-    await axios.post(
-      `${axiosInstanse.defaults.baseURL}/edit`,
-      JSON.stringify({ description: value, id })
-    );
+    await axios.post(`${axiosInstanse.defaults.baseURL}/edit`, {
+      description: value,
+      id,
+    });
   } catch (error) {
     console.error(error);
   }
@@ -76,7 +72,7 @@ const editItem = async (value: string, id: string) => {
 
 const getTodos = async () => {
   try {
-    const result = await axios.get<TodoItem[] | TodoItem>(
+    const result = await axios.get<TodoItem[]>(
       `${axiosInstanse.defaults.baseURL}`
     );
 
@@ -88,7 +84,7 @@ const getTodos = async () => {
 
 export {
   getTodos,
-  addTodo,
+  addTodoPost,
   deleteItem,
   completedItem,
   completedAllItem,

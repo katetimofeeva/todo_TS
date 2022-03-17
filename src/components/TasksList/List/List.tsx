@@ -1,7 +1,8 @@
 import React from "react";
 import { useSelector } from "react-redux";
-
 import styled from "styled-components";
+import { nanoid } from "nanoid";
+
 import TaskItem from "../TaskItem/index";
 import { receiveTodos, receiveMarker } from "../../../redux/selectors";
 import { TodoItem } from "../../../types/Types";
@@ -25,7 +26,7 @@ const List: React.FC = () => {
     <Root>
       <Wrapper>
         {showTask.map((item: TodoItem) => {
-          return <TaskItem item={item} key={item.id} />;
+          return <TaskItem item={item} key={nanoid(10)} />;
         })}
       </Wrapper>
     </Root>

@@ -7,8 +7,6 @@ import { completedAllTasks } from "../../../redux/actions";
 import { receiveTodos } from "../../../redux/selectors";
 import { TodoItem } from "../../../types/Types";
 
-// import {completedAllItem, getTodos} from '../../../Utils/Servise'
-
 const MainCheckbox = () => {
   const todosLength: number = useSelector(receiveTodos).length;
   const todos: TodoItem[] = useSelector(receiveTodos);
@@ -21,10 +19,6 @@ const MainCheckbox = () => {
     : (isAllCompleted = todos.every((item: TodoItem) => item.completed));
 
   const handleToggleAllTasks = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // completedAllTasks(e.target.checked);
-    // getTodos().then((res) => {
-    //   dispatch(completedAllTaskActionCreator(res.data));
-    // });
     dispatch(completedAllTasks(isAllCompleted));
   };
 
@@ -72,7 +66,6 @@ const Span = styled.span<SpanProps>`
   color: ${({ checked }) => (checked ? " #737373" : "#d9d9d9")};
   padding: 0 17px;
   transform: rotate(90deg);
-  /* overflow: ${(checked) => (checked ? "visible" : "hidden")}; */
 `;
 
 export default MainCheckbox;

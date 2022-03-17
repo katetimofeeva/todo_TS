@@ -1,4 +1,5 @@
 import { TodoItem } from "../types/Types";
+import { TodoActionType } from "../redux/actions";
 
 export type TodosState = {
   todos: TodoItem[];
@@ -14,90 +15,51 @@ type TodoAction = {
   payload: any;
 };
 
-// type TodoAction = {
-//   type: string;
-//   payload: {
-//     todos?: TodoItem[] | TodoItem;
-//     marker?: string;
-//     id?: string;
-//     description?: string;
-//     completed?: boolean;
-
-//   }
-// };
-
 function reducer(
   state: TodosState = initialState,
   action: TodoAction
 ): TodosState {
   switch (action.type) {
-    case "ADD_TASK":
+    case TodoActionType.ADD_TASKS_TO_LIST:
       return {
         ...state,
-        todos: [...state.todos, action.payload.todos],
-        // ...state.todos,
-        // { id: id, description: description, completed: false },
+        todos: action.payload.todos,
       };
 
-    case "DELETE_TASK":
+    case TodoActionType.DELETE_TASK_TO_LIST:
       return {
         ...state,
-        todos: state.todos.filter((item) => item.id !== action.payload.id),
-        // state.todos.filter((item) => item.id !== action.id),
-      }; //[]
-
-    case "TOGGLE_COMPLETE_TASK":
-      return {
-        ...state,
-        // todos: action.payload.todos,
-        todos: state.todos.map((item) => {
-          if (action.payload.id === item.id) {
-            return {
-              ...item,
-              completed: !item.completed,
-            };
-          }
-          return item;
-        }),
+        todos: action.payload.todos,
       };
 
-    case "EDIT_TASK":
+    case TodoActionType.TOGGLE_COMPLETE_TASK_TO_LIST:
       return {
         ...state,
-        // todos: action.payload.todos,
-        todos: state.todos.map((item) => {
-          if (action.payload.id === item.id) {
-            return {
-              ...item,
-              description: action.payload.description,
-            };
-          }
-          return item;
-        }),
+        todos: action.payload.todos,
       };
 
-    case "COMPLETED_ALL_TASKS":
+    case TodoActionType.EDIT_TASK_TO_LIST:
       return {
         ...state,
-        // todos: action.payload.todos,
-        todos: state.todos.map((item) => {
-          return {
-            ...item,
-            completed: !action.payload.completed,
-          };
-        }),
+        todos: action.payload.todos,
       };
 
-    case "SET_MARKER":
+    case TodoActionType.COMPLETED_ALL_TASKS_TO_LIST:
+      return {
+        ...state,
+        todos: action.payload.todos,
+      };
+
+    case TodoActionType.SET_MARKER:
       return {
         ...state,
         marker: action.payload.marker,
       };
 
-    case "DELETE_ALL_TASKS":
+    case TodoActionType.DELETE_ALL_TASKS_TO_LIST:
       return {
         ...state,
-        todos: state.todos.filter((item) => !item.completed),
+        todos: action.payload.todos,
         marker: "all",
       };
 
