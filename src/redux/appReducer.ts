@@ -1,10 +1,10 @@
-import { TodoActionType } from "./actions";
+import { TodoActionType } from "../redux/actions";
 
 const initialState = {
   loading: false,
 };
 
-export const appReducer = (state = initialState, action:{type: string}) => {
+export const appReducer = (state = initialState, action: { type: string }) => {
   switch (action.type) {
     case TodoActionType.SHOW_LOADER:
       return {

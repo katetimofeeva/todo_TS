@@ -1,4 +1,5 @@
 import { TodoItem } from "../types/Types";
+import { GetTodos } from "../utils/redux";
 import { TodoActionType } from "../redux/actions";
 
 export type TodosState = {
@@ -20,31 +21,7 @@ function reducer(
   action: TodoAction
 ): TodosState {
   switch (action.type) {
-    case TodoActionType.ADD_TASKS_TO_LIST:
-      return {
-        ...state,
-        todos: action.payload.todos,
-      };
-
-    case TodoActionType.DELETE_TASK_TO_LIST:
-      return {
-        ...state,
-        todos: action.payload.todos,
-      };
-
-    case TodoActionType.TOGGLE_COMPLETE_TASK_TO_LIST:
-      return {
-        ...state,
-        todos: action.payload.todos,
-      };
-
-    case TodoActionType.EDIT_TASK_TO_LIST:
-      return {
-        ...state,
-        todos: action.payload.todos,
-      };
-
-    case TodoActionType.COMPLETED_ALL_TASKS_TO_LIST:
+    case GetTodos.type.SUCCESS:
       return {
         ...state,
         todos: action.payload.todos,
@@ -54,13 +31,6 @@ function reducer(
       return {
         ...state,
         marker: action.payload.marker,
-      };
-
-    case TodoActionType.DELETE_ALL_TASKS_TO_LIST:
-      return {
-        ...state,
-        todos: action.payload.todos,
-        marker: "all",
       };
 
     default:

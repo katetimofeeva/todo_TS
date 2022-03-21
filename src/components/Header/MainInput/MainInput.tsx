@@ -3,19 +3,19 @@ import { useDispatch } from "react-redux";
 import styled from "styled-components";
 
 import MainCheckbox from "../MainCheckbox/index";
-import { addTask } from "../../../redux/actions";
+import { PostTodo, createAsyncAction } from "../../../utils/redux";
 
 const MainInput = () => {
   const dispatch = useDispatch();
   const [value, setValue] = useState<string>("");
-  
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && value.trim().length !== 0) {
-      dispatch(addTask(value));
+      createAsyncAction(dispatch, PostTodo.request(value));
       setValue("");
     }
   };

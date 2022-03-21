@@ -1,25 +1,24 @@
 import React, { useEffect } from "react";
-
 import { useSelector, useDispatch } from "react-redux";
-
 import styled from "styled-components";
 
 import Header from "../components/Header/index";
 import List from "../components/TasksList/List/index";
 import Footer from "../components/Footer/index";
-import { getTodos } from "../Utils/Servise";
+import { getTodos } from "../utils/Servise";
 import { receiveTodos } from "../redux/selectors";
-import { addTasksToList } from "../redux/actions";
 import { TodoItem } from "../types/Types";
+import { GetTodos, createAsyncAction } from "../utils/redux";
 
 const Todo: React.FC = () => {
   const todos: Array<TodoItem> = useSelector(receiveTodos);
 
   const dispatch: any = useDispatch();
+
   useEffect(() => {
     getTodos().then((res) => {
       //@ts-ignore
-      dispatch(addTasksToList(res.data));
+      createAsyncAction(dispatch, GetTodos.request(res.data));
     });
   }, []);
 
@@ -29,6 +28,7 @@ const Todo: React.FC = () => {
         <Header />
         <List />
       </MainSection>
+
       {todos.length === 0 ? "" : <Footer />}
     </Root>
   );

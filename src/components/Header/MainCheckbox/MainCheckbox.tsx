@@ -1,11 +1,10 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-
 import styled from "styled-components";
 
-import { completedAllTasks } from "../../../redux/actions";
 import { receiveTodos } from "../../../redux/selectors";
 import { TodoItem } from "../../../types/Types";
+import { createAsyncAction, CompletedAllTasks } from "../../../utils/redux";
 
 const MainCheckbox = () => {
   const todosLength: number = useSelector(receiveTodos).length;
@@ -19,7 +18,10 @@ const MainCheckbox = () => {
     : (isAllCompleted = todos.every((item: TodoItem) => item.completed));
 
   const handleToggleAllTasks = (e: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch(completedAllTasks(isAllCompleted));
+    createAsyncAction(
+      dispatch,
+      CompletedAllTasks.request({ completed: isAllCompleted })
+    );
   };
 
   return (

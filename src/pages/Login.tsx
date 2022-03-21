@@ -7,7 +7,7 @@ import Button from "@mui/material/Button";
 import { Formik } from "formik";
 import * as yup from "yup";
 
-import { loginUser } from "../Utils/Servise";
+import { loginUser } from "../utils/Servise";
 
 const Login: React.FC = () => {
   const ValidationSchema = yup.object().shape({

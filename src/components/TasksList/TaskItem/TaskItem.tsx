@@ -1,17 +1,16 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-
 import styled from "styled-components";
 
-import {
-  deleteTask,
-  toggleTask,
-  editTask,
-  setMarker,
-} from "../../../redux/actions";
-
+import { setMarker } from "../../../redux/actions";
 import { receiveTodos, receiveMarker } from "../../../redux/selectors";
 import { TodoItem } from "../../../types/Types";
+import {
+  createAsyncAction,
+  DeleteItem,
+  EditItem,
+  CompletedItem,
+} from "../../../utils/redux";
 
 interface ItemProps {
   item: TodoItem;
@@ -30,33 +29,41 @@ const TaskItem: React.FC<ItemProps> = ({ item }) => {
   };
 
   const completedTask = (): void => {
-    dispatch(toggleTask(item._id, item.completed));
+    createAsyncAction(
+      dispatch,
+      CompletedItem.request({ id: item._id, completed: item.completed })
+    );
   };
 
   const handleDeleteTask = (): void => {
-    dispatch(deleteTask(item._id));
-
+    createAsyncAction(dispatch, DeleteItem.request({ id: item._id }));
     if (marker === "completed" && todos.length) {
       dispatch(setMarker("all"));
     }
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter" && value.length) {
-      dispatch(editTask(item._id, value));
+    if (e.key === "Enter" && value.trim().length) {
+      createAsyncAction(
+        dispatch,
+        EditItem.request({ id: item._id, description: value })
+      );
       setActiveEdit(true);
-    } else if (e.key === "Enter" && !value.length) {
-      dispatch(deleteTask(item._id));
+    } else if (e.key === "Enter" && !value.trim().length) {
+      createAsyncAction(dispatch, DeleteItem.request({ id: item._id }));
       setActiveEdit(true);
     }
   };
 
   const handleBlur = (): void => {
-    if (value.length) {
-      dispatch(editTask(item._id, value));
+    if (value.trim().length) {
+      createAsyncAction(
+        dispatch,
+        EditItem.request({ id: item._id, description: value })
+      );
       setActiveEdit(true);
     } else {
-      dispatch(deleteTask(item._id));
+      createAsyncAction(dispatch, DeleteItem.request({ id: item._id }));
     }
     setActiveEdit(true);
   };

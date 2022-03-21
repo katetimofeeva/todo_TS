@@ -1,14 +1,12 @@
-import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-
 import styled from "styled-components";
 
 import FilterTasks from "./FilterTasks/index";
-
-import { deleteAllTask, setMarker } from "../../redux/actions";
+import { setMarker } from "../../redux/actions";
 import { receiveMarker, receiveTodos } from "../../redux/selectors";
-
 import { TodoItem } from "../../types/Types";
+import { createAsyncAction, DeleteAllTasks } from "../../utils/redux";
+
 const Footer = () => {
   const todos: TodoItem[] = useSelector(receiveTodos);
 
@@ -20,7 +18,7 @@ const Footer = () => {
   ).length;
 
   const clearCompletedAll = () => {
-    dispatch(deleteAllTask(todos));
+    createAsyncAction(dispatch, DeleteAllTasks.request());
 
     if (marker === "completed" && todos.length) {
       dispatch(setMarker("all"));

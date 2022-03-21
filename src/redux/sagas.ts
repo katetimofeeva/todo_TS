@@ -1,15 +1,15 @@
 import { takeEvery, put, call } from "redux-saga/effects";
 
 import { TodoItem } from "../types/Types";
-import { TodoActionType } from "./actions";
 import {
-  addTasksToList,
-  deleteTaskToList,
-  editTaskToList,
-  completedAllTasksToList,
-  toggleTaskToList,
-  deleteAllTaskToList,
-} from "./actions";
+  PostTodo,
+  GetTodos,
+  DeleteItem,
+  EditItem,
+  CompletedItem,
+  CompletedAllTasks,
+  DeleteAllTasks,
+} from "../utils/redux";
 import {
   addTodoPost,
   getTodos,
@@ -18,7 +18,7 @@ import {
   editItem,
   completedAllItem,
   completedItem,
-} from "../Utils/Servise";
+} from "../utils/Servise";
 
 type Action = {
   type: string;
@@ -34,65 +34,101 @@ type Data = {
   data?: { description: string; _id: string; completed: boolean }[];
 };
 
-export function* sagaWatchers() {
-  yield takeEvery(TodoActionType.ADD_TASK, addWorker);
-  yield takeEvery(TodoActionType.GET_TODOS, getTodosWorker);
-  yield takeEvery(TodoActionType.DELETE_ALL_TASKS, deleteAllTaskWorker);
-  yield takeEvery(TodoActionType.EDIT_TASK, editTaskWorker);
-  yield takeEvery(TodoActionType.DELETE_TASK, deleteTaskById);
-  yield takeEvery(
-    TodoActionType.COMPLETED_ALL_TASKS,
-    toggleCompletedAllTasksWorker
-  );
-  yield takeEvery(
-    TodoActionType.TOGGLE_COMPLETE_TASK,
-    toggleCompletedTaskWorker
-  );
-}
-
 function* addWorker(action: Action) {
-  const { description } = action.payload;
-  // @ts-ignore
-  yield call(addTodoPost, description);
-  yield getTodosWorker(addTasksToList);
+  try {
+    // @ts-ignore
+    yield call(addTodoPost, action.payload);
+    yield put(PostTodo.success());
+    yield put(GetTodos.request());
+  } catch (err) {
+    console.log(err);
+    yield put(GetTodos.failed());
+  }
 }
 
 function* toggleCompletedTaskWorker(action: Action) {
-  const { id, completed } = action.payload;
-  // @ts-ignore
-  yield call(completedItem, id, completed);
-  yield getTodosWorker(toggleTaskToList);
+  try {
+    const { id, completed } = action.payload;
+    // @ts-ignore
+    yield call(completedItem, id, completed);
+    yield put(CompletedItem.success());
+    yield put(GetTodos.request());
+  } catch (err) {
+    console.log(err);
+    yield put(GetTodos.failed());
+  }
 }
 
 function* toggleCompletedAllTasksWorker(action: Action) {
-  const { completed } = action.payload;
-
-  yield call(completedAllItem, completed);
-  yield getTodosWorker(completedAllTasksToList);
+  try {
+    const { completed } = action.payload;
+    yield call(completedAllItem, completed);
+    yield put(CompletedAllTasks.success());
+    yield put(GetTodos.request());
+  } catch (err) {
+    console.log(err);
+    yield put(GetTodos.failed());
+  }
 }
 
 function* deleteTaskById(action: Action) {
-  const { id } = action.payload;
-  // @ts-ignore
-  yield call(deleteItem, id);
-  yield getTodosWorker(deleteTaskToList);
+  try {
+    const { id } = action.payload;
+    // @ts-ignore
+    yield call(deleteItem, id);
+    yield put(DeleteItem.success());
+    yield put(GetTodos.request());
+  } catch (err) {
+    console.log(err);
+    yield put(GetTodos.failed());
+  }
 }
 
 function* editTaskWorker(action: Action) {
-  const { id, description } = action.payload;
-  // @ts-ignore
-  yield call(editItem, description, id);
-  yield getTodosWorker(editTaskToList);
+  try {
+    const { id, description } = action.payload;
+    // @ts-ignore
+    yield call(editItem, description, id);
+    yield put(EditItem.success());
+    yield put(GetTodos.request());
+  } catch (err) {
+    console.log(err);
+    yield put(GetTodos.failed());
+  }
 }
 
 function* deleteAllTaskWorker() {
-  yield call(deleteAllTasks);
-  yield getTodosWorker(deleteAllTaskToList);
+  try {
+    yield call(deleteAllTasks);
+    yield put(DeleteAllTasks.success());
+    yield put(GetTodos.request());
+  } catch (err) {
+    console.log(err);
+    yield put(GetTodos.failed);
+  }
 }
 
-function* getTodosWorker(request: any) {
-  const data: Data = yield call(getTodos);
-  yield put(request(data.data));
+function* getTodosWorker(action: any) {
+  try {
+    const data: Data = yield call(getTodos);
+    yield put(GetTodos.success({ todos: data.data }));
+  } catch (err) {
+    console.log(err);
+    yield put(GetTodos.failed());
+  }
+}
+
+export function* sagaWatchers() {
+  yield takeEvery(PostTodo.type.REQUEST, addWorker);
+  yield takeEvery(GetTodos.type.REQUEST, getTodosWorker);
+  yield takeEvery(DeleteAllTasks.type.REQUEST, deleteAllTaskWorker);
+  yield takeEvery(EditItem.type.REQUEST, editTaskWorker);
+  yield takeEvery(DeleteItem.type.REQUEST, deleteTaskById);
+  yield takeEvery(
+    CompletedAllTasks.type.REQUEST,
+    toggleCompletedAllTasksWorker
+  );
+  yield takeEvery(CompletedItem.type.REQUEST, toggleCompletedTaskWorker);
 }
 
 export default function* rootSaga() {
