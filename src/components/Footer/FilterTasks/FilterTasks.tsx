@@ -1,5 +1,6 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useSearchParams } from "react-router-dom";
 
 import { FILTERS } from "./Constants";
 import { setMarker } from "../../../redux/actions";
@@ -11,9 +12,16 @@ const FilterTasks: React.FC = () => {
   const marker: string = useSelector(receiveMarker);
 
   const dispatch = useDispatch();
-
+  const [searchParams, setSearchParams] = useSearchParams();
+  const filterQuery = searchParams.get("filter") || "";
   const getFilter = (e: React.MouseEvent): void => {
     const button = e.target as HTMLElement;
+    const query = button.innerText.toLocaleLowerCase();
+    if (query === "all") {
+      setSearchParams({});
+    } else {
+      setSearchParams({ filter: query });
+    }
 
     dispatch(setMarker(button.innerText.toLocaleLowerCase()));
   };

@@ -6,41 +6,41 @@ const loginUser = async (value: { email: string; password: string }) => {
 };
 
 const addTodoPost = async (value: string): Promise<any> => {
-  await axiosInstanse.post(`/`, {
+  await axiosInstanse.post(`/todo`, {
     description: value,
     completed: false,
   });
 };
 
 const deleteItem = async (id: string) => {
-  await axiosInstanse.post(`/delete`, id);
+  await axiosInstanse.delete(`/delete/${id}`);
 };
 
 const completedItem = async (id: string, checked: boolean) => {
-  await axiosInstanse.post(`/checked`, {
+  await axiosInstanse.put(`/todo/update`, {
     id,
     checked: !checked,
   });
 };
 
 const completedAllItem = async (checked: boolean) => {
-  await axiosInstanse.post(`/completed`, {
+  await axiosInstanse.put(`/todos/completeAll`, {
     checked: !checked,
   });
 };
 
 const deleteAllTasks = async () => {
-  await axiosInstanse.post(`/deleteAllCompleted`);
+  await axiosInstanse.delete(`todos/deleteAll`);
 };
 
 const editItem = async (value: string, id: string) => {
-  await axiosInstanse.post(`/edit`, {
+  await axiosInstanse.put(`/todo/update`, {
     description: value,
     id,
   });
 };
 
-const getTodos = async () => await axiosInstanse.get<TodoItem[]>(`/`);
+const getTodos = async (filter:string) => await axiosInstanse.get<TodoItem[]>(`/todos/?filter=${filter}`);
 
 export {
   getTodos,

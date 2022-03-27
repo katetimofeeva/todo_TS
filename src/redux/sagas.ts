@@ -1,4 +1,4 @@
-import { takeEvery, put, call } from "redux-saga/effects";
+import { takeEvery, put, call, select } from "redux-saga/effects";
 
 import { TodoItem } from "../types/Types";
 import {
@@ -27,11 +27,17 @@ type Action = {
     description?: string;
     id?: string;
     completed: boolean;
+    filter: string;
   };
 };
 
 type Data = {
   data?: { description: string; _id: string; completed: boolean }[];
+};
+
+type Store = {
+  todos: TodoItem[];
+  marker: string;
 };
 
 function* addWorker(action: Action) {
@@ -98,7 +104,7 @@ function* editTaskWorker(action: Action) {
 }
 
 function* deleteAllTaskWorker() {
-  try {
+   try {
     yield call(deleteAllTasks);
     yield put(DeleteAllTasks.success());
     yield put(GetTodos.request());
@@ -108,9 +114,10 @@ function* deleteAllTaskWorker() {
   }
 }
 
-function* getTodosWorker(action: any) {
+function* getTodosWorker() {
   try {
-    const data: Data = yield call(getTodos);
+    const store: Store = yield select();
+    const data: Data = yield call(getTodos, store.marker);
     yield put(GetTodos.success({ todos: data.data }));
   } catch (err) {
     console.log(err);

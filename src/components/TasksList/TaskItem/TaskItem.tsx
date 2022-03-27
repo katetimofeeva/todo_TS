@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
+import { useSearchParams } from "react-router-dom";
 
 import { setMarker } from "../../../redux/actions";
 import { receiveTodos, receiveMarker } from "../../../redux/selectors";
@@ -20,6 +21,8 @@ const TaskItem: React.FC<ItemProps> = ({ item }) => {
   const [activeEdit, setActiveEdit] = useState(true);
   const [value, setValue] = useState(item.description);
 
+  const [searchParams, setSearchParams] = useSearchParams();
+
   const dispatch = useDispatch();
   const todos: TodoItem[] = useSelector(receiveTodos);
   const marker: string = useSelector(receiveMarker);
@@ -37,8 +40,11 @@ const TaskItem: React.FC<ItemProps> = ({ item }) => {
 
   const handleDeleteTask = (): void => {
     createAsyncAction(dispatch, DeleteItem.request({ id: item._id }));
-    if (marker === "completed" && todos.length) {
+    const filterQuery = searchParams.get("filter") || "";
+    const del = todos.filter((item) => item.completed).length - 1;
+    if (marker === "completed" && !del) {
       dispatch(setMarker("all"));
+      setSearchParams({});
     }
   };
 

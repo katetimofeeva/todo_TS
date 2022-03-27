@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
+import { useSearchParams } from "react-router-dom";
 
 import Header from "../components/Header/index";
 import List from "../components/TasksList/List/index";
@@ -12,14 +13,12 @@ import { GetTodos, createAsyncAction } from "../utils/redux";
 
 const Todo: React.FC = () => {
   const todos: Array<TodoItem> = useSelector(receiveTodos);
-
+  const [searchParams, setSearchParams] = useSearchParams();
   const dispatch: any = useDispatch();
-
+  const filterQuery = searchParams.get("filter") || "";
   useEffect(() => {
-    getTodos().then((res) => {
-      //@ts-ignore
-      createAsyncAction(dispatch, GetTodos.request(res.data));
-    });
+    createAsyncAction(dispatch, GetTodos.request());
+    setSearchParams({});
   }, []);
 
   return (

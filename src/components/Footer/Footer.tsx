@@ -1,5 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
+import { useSearchParams } from "react-router-dom";
 
 import FilterTasks from "./FilterTasks/index";
 import { setMarker } from "../../redux/actions";
@@ -9,6 +10,7 @@ import { createAsyncAction, DeleteAllTasks } from "../../utils/redux";
 
 const Footer = () => {
   const todos: TodoItem[] = useSelector(receiveTodos);
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const marker: string = useSelector(receiveMarker);
   const dispatch = useDispatch();
@@ -19,8 +21,9 @@ const Footer = () => {
 
   const clearCompletedAll = () => {
     createAsyncAction(dispatch, DeleteAllTasks.request());
-
-    if (marker === "completed" && todos.length) {
+    const filterQuery = searchParams.get("filter") || "";
+    if (marker === "completed") {
+      setSearchParams({});
       dispatch(setMarker("all"));
     }
   };
